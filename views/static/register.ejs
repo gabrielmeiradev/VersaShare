@@ -1,0 +1,126 @@
+<div class="login-area">
+    <header class="login-header">
+        <div class="logo-container">
+            <%- include('../svgs/versashare-logo.ejs') %>
+        </div>
+        <div class="side-options">
+            <a href="politica-de-privacidade">Política de privacidade</a>
+        </div>
+    </header>
+    <main class="login-body">
+        <form class="login-elements" action="register" method="POST">
+            <div class="intro">
+                <h2 class="hello">Cadastre-se</h2>
+                <p class="desc">Cadastre uma conta VersaShare</p>
+            </div>
+            <div class="input">
+                <label for="name">Nome completo</label>
+                <input type="text" name="name" id="name" autocomplete="on" required>
+            </div>
+            <div class="input">
+                <label for="username">Username
+                    <span class="already-using" id="feedback_username">
+                        <span class="material-symbols-outlined already-using-icon">
+                            cancel
+                        </span>
+                        Nome de usuário já utilizado
+                    </span>
+                </label>
+                <input type="text" name="username" id="username" autocomplete="on" required>
+            </div>
+            <div class="input">
+                <label for="email">Email
+                    <span class="already-using" id="feedback_email">
+                        <span class="material-symbols-outlined already-using-icon">
+                            cancel
+                        </span>
+                        Endereço de email já utilizado
+                    </span>
+                </label>
+                <input type="email" name="email" id="email" autocomplete="on" required>
+            </div>
+            <div class="input">
+                <label for="senha">Senha</label>
+                <input type="password" name="password" id="password" required minlength="5">
+            </div>
+            <button type="submit" id="submit-button" class="darkmode-ignore">Cadastrar</button>
+            <p class="without-account-ask">Já tem uma conta? <a href="login">Entre nela</a></p>
+        </form>
+    </main>
+    <footer>
+        <p>Copyright © 2022 VersaShare</p>
+    </footer>
+</div>
+
+
+<script>
+    const email = document.querySelector('#email');
+    const feedbackEmail = document.querySelector('#feedback_email');
+    const username = document.querySelector('#username');
+    const feedbackUsername = document.querySelector('#feedback_username');
+    const submitButton = document.querySelector('#submit-button')
+    feedbackUsername.style.display = 'none';
+    feedbackEmail.style.display = 'none';
+
+    let disabledBy = {
+        email: false,
+        username: false,
+    }
+
+    function userAPI(Value, Type) {
+        let url = 'http://localhost:4040/';
+        switch(Type){
+            case 'email':
+                url+= 'email/' + Value;
+                console.log(url)
+                break;
+            case 'username':
+                url+= 'username/' + Value;
+                break;
+
+        }
+        return fetch(url)
+            .then(response => response.json())
+    }
+
+    username.addEventListener('input', (e) => {
+        let usernameInputValue = username.value;
+
+        userAPI(usernameInputValue, 'username').then((data) => {
+            if (data.response) {
+                feedbackUsername.style.display = 'inherit';
+                disabledBy.username = true;
+            } else {
+                feedbackUsername.style.display = 'none';
+                disabledBy.username = false;
+            }
+            buttonReloader();
+        });
+
+    })
+
+    email.addEventListener('input', (e) => {
+        let emailInputValue = email.value;
+
+        userAPI(emailInputValue, 'email').then((data) => {
+            if (data.response) {
+                feedbackEmail.style.display = 'inherit';
+                disabledBy.email = true;
+            } else {
+                feedbackEmail.style.display = 'none'
+                disabledBy.email = false;
+            }
+            buttonReloader();
+        });
+
+    })
+
+    function buttonReloader(){
+        if(disabledBy.email || disabledBy.username){
+            submitButton.disabled = true;
+        }
+        else{
+            submitButton.disabled = false;
+        }
+    }
+</script>

@@ -1,0 +1,26 @@
+.navbar{
+    justify-content: space-between;
+    padding: 24px 48px;
+}
+
+.navbar-icons-container {
+    gap: 40px;
+}
+
+.navbar, .navbar-icons-container{
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon{
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    justify-content: center;
+}
+
+.navbar-icon{
+    cursor: pointer;
+}

@@ -1,0 +1,148 @@
+.login-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-height: 100vh;
+    min-height: 100vh;
+}
+
+.login-header {
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.side-options a {
+    color: rgba(0, 0, 0, .7);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.logo-container svg {
+    fill: black;
+    height: 20px;
+}
+
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.intro {
+    margin-bottom: 30px;
+}
+
+.intro .hello {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 0;
+    font-family: var(--primary-font);
+}
+
+.intro .desc {
+    color: #999999;
+    font-weight: 500;
+}
+
+.login-elements {
+    width: 34vw;
+}
+
+.login-elements .input {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.login-elements .input input {
+    border: #DEDEDE 1px solid;
+}
+
+.login-elements .input input:focus {
+    transition: .2s ease;
+    border-color: black;
+}
+
+.login-elements .input input,
+.login-elements button {
+    max-width: 100%;
+    border-radius: 10px;
+    padding: 15px;
+    outline: none;
+}
+
+.login-area footer {
+    text-align: center;
+    font-size: .8rem;
+    padding: 10px;
+}
+
+.login-body button {
+    width: 100%;
+    background: var(--main-color);
+    border: 1px solid var(--main-color);
+    cursor: pointer;
+}
+
+
+.login-body button:disabled {
+    width: 100%;
+    cursor: auto;
+    border: none;
+}
+
+
+#remember-me {
+    border-radius: 10px;
+}
+
+.remember-me-area {
+    margin: 10px 8px 50px 0;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+#remember-me:checked {
+    outline: none;
+}
+
+.without-account-ask {
+    color: #999999;
+    text-align: center;
+}
+
+
+.without-account-ask a {
+    color: black;
+}
+
+.already-using {
+    color: red;
+    transform: scale(.8);
+    gap: 8px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+label {
+    display: flex;
+    flex-direction: row;
+    height: 24px;
+}
+
+@media screen and (max-width: 780px) {
+    .login-elements {
+        width: 100vw;
+        padding: 0 43px;
+    }
+
+    .login-header {
+        text-align: center;
+        flex-direction: column;
+        padding: 70px 0 0 0;
+    }
+}

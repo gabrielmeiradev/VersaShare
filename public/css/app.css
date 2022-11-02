@@ -1,0 +1,82 @@
+#app{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    padding: 0 48px;
+}
+
+.action-button{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #23A3FF;
+    background: transparent;
+    padding: 9px 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    border: 2px solid #23A3FF;
+    transition: .12s ease;
+    isolation: isolate;
+}
+.action-button:hover{
+    background: #23A3FF;
+    color: white;
+}
+
+.workspace-section{
+    margin-top: 20px;
+}
+
+.workspace-section-title{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.folders-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px
+}
+
+.folder-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 8px 20px;
+    border: 1px solid #F0F0F0;
+    box-sizing: border-box;
+    width: fit-content;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.contact-container{
+    border-radius: 50%;
+}
+
+
+
+/* For darkmode */
+
+.darkmode--activated .search-bar {
+    background: #181818;
+    color: white;
+    mix-blend-mode: difference;
+}
+
+.search-bar{
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    width: 100%;
+    background: #F3F3F3;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 26px;
+    outline: none;
+}
+
+.sidebar-section-option a{
+    color: black;
+    text-decoration: none;
+}

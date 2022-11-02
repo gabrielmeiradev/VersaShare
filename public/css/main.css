@@ -1,0 +1,44 @@
+@import 'login.css';
+@import 'navbar.css';
+@import 'app.css';
+
+::selection{
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.83);
+    color: white;
+}
+
+body, html{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+:root{
+    --dark-bg-color: #FFFFFF;
+    --main-text-color: #000000;
+    --main-color: #FFBA52;
+
+    --primary-font:'Be Vietnam Pro', sans-serif;
+    --secondary-font: 'Inter', sans-serif;
+}
+
+body{
+    font-family: var(--secondary-font);
+    color: black;
+    overflow-x: hidden;
+}
+
+button{
+    font-family: var(--secondary-font);
+}
+
+.flex-row{
+    display: flex;
+}
+
+.gap-sm{
+    gap: 18px;
+}
+

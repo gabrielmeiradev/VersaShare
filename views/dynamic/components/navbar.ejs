@@ -1,0 +1,24 @@
+<nav class="navbar">
+    <div class="logo-container">
+        <%- include('../../svgs/versashare-logo.ejs') %>
+    </div>
+    <div class="navbar-icons-container">
+        <div class="navbar-icon">
+            <span class="material-symbols-outlined">
+                menu
+            </span>
+        </div>
+        <div class="navbar-icon">
+            <span class="material-symbols-outlined">
+                settings
+            </span>
+        </div>
+        <div class="navbar-icon darkmode-ignore">
+            <a href="logout" style="text-decoration: none">
+                <span class="profile-icon" style="color: white; background-color: <%= user.avatarBGColor %>;">
+                    <%= user.name[0] %>
+                </span>
+            </a>
+        </div>
+    </div>
+</nav>
