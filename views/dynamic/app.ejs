@@ -1,18 +1,18 @@
 <%- include('components/navbar.ejs') %>
 <div id="app">
-    <%- include('components/sidebar-main-page.ejs') %>
+    <%- include('components/sidebar-main-page.ejs') %> 
     <div id="workspace">
         <h1>Workspace</h1>
-        <div class="search-bar-container">
-            <form method="get" action="/">
-                <input placeholder="Pesquise no workspace" name="q" class="search-bar" autocomplete="off">
+        <div class="search-bar-container"> 
+            <form method="get" action="/"> 
+                <input placeholder="Pesquise no workspace" name="q" class="input-main" autocomplete="off">
             </form>
         </div>
         <!-- TODO: Workspace folders-->
         <div class="workspace-section">
             <div class="workspace-section-title">
                 <h2>Pastas compartilhadas</h2>
-                <button onclick="" class="action-button">
+                <button onclick="modal('new-folder')" class="action-button">
                     <span class="material-symbols-outlined">
                         add
                     </span> <!-- + -->
@@ -27,133 +27,38 @@
                 </div>
                 <p>Projeto de informática</p>
             </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Escritório Durski</p>
-            </div>
         </div>
 
         <div class="workspace-section">
             <div class="workspace-section-title">
                 <h2>Contatos diretos</h2>
-                <button onclick="" class="action-button">
+                <button onclick="modal('new-contact')" class="action-button">
                     <span class="material-symbols-outlined">
                         add
                     </span> <!-- + -->
 
                     Adicionar um contato</button>
             </div>
-            <div class="folders-container">
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #FFB423">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Projeto de informática</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
-                <div class="folder-container">
-                    <div class="folder-icon darkmode-ignore" style="fill: #8735EF">
-                        <%- include('../svgs/shared-folder.ejs') %>
-                    </div>
-                    <p>Escritório Durski</p>
-                </div>
+            <div class="contacts-container">
+                <% 
+                    var contatos = [
+                        {
+                            nome: 'Gabriel Meira',
+                            avatar: 'https://faces-img.xcdn.link/image-lorem-face-4471.jpg'
+                        }, 
+                        {
+                            nome: 'Andrey',
+                            avatar: 'https://www.beckdigital.com/assets/images/about/alex-herbert.jpg'
+                        }, 
+                        {
+                            nome: 'Rafael',
+                            avatar: 'https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'
+                        },
+                    ]
+                    for(var contato of contatos){ 
+                %>
+                <%- include('components/contacts/direct-contact-profile.ejs', { contato }) %>
+                <% } %>
             </div>
         </div>
 

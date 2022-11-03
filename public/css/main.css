@@ -1,6 +1,8 @@
 @import 'login.css';
 @import 'navbar.css';
 @import 'app.css';
+@import 'modal.css';
+@import 'buttons.css';
 
 ::selection{
     z-index: 999;
@@ -19,7 +21,7 @@ body, html{
     --dark-bg-color: #FFFFFF;
     --main-text-color: #000000;
     --main-color: #FFBA52;
-
+    --primary-blue: #008CF1;
     --primary-font:'Be Vietnam Pro', sans-serif;
     --secondary-font: 'Inter', sans-serif;
 }

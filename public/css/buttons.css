@@ -1,0 +1,9 @@
+.blue-button{
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 10px;
+}

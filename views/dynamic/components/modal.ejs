@@ -1,0 +1,75 @@
+<div class="modal-container">
+    <div class="modal">
+        <h2 class="modal-title">{{modal-title}}}</h2>
+        <div class="modal-inputs"></div>
+        <input type="button" id="botao" value="Adicionar" class="blue-button">
+    </div>
+</div>
+
+<script>
+    const modals = {
+        "new-folder": {
+            title: 'Nova pasta',
+            inputs: 
+            [
+                {
+                    name: 'folder-name',
+                    type: 'text',
+                    placeholder: 'Nome da pasta'
+                }
+            ]
+        },
+        "new-contact": {
+            title: 'Novo contato',
+            inputs: 
+            [
+                {
+                    name: 'contact-id',
+                    type: 'text',
+                    placeholder: 'E-mail ou username'
+                }
+            ]
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape'){
+            closeModal();
+        }
+    })
+    
+    const modalContainer = document.querySelector('.modal-container');
+    const modalArea = document.querySelector('.modal');
+    const modalTitle = document.querySelector('.modal-title');
+    const modalInputs = document.querySelector('.modal-inputs');
+
+   modalContainer.onclick = function(e) {
+        if(e.target === modalContainer) {
+            closeModal();
+        } 
+    }   
+
+    function restartModal(){
+        modalInputs.innerHTML = '';
+    }
+
+    function modal(modalType){
+        let currentModal = modals[modalType];
+        modalTitle.innerText = currentModal.title;
+        for(var input of currentModal.inputs){
+            let inputElement = document.createElement('input');
+            inputElement.name = input.name; 
+            inputElement.type = input.type; 
+            inputElement.placeholder = input.placeholder;
+            inputElement.classList.add("input-main");
+            modalInputs.appendChild(inputElement);
+        }
+        modalContainer.style.display = 'flex';
+    }
+
+    function closeModal(){
+        modalContainer.style.display = 'none';  
+        restartModal();
+    }
+    
+</script>
