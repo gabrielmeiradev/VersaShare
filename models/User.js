@@ -41,6 +41,10 @@ const UserSchema = new mongoose.Schema({
   userId: {
     type: String,
     require: false
+  },
+  workspaceId: {
+    type: String,
+    require: true
   }
 }
 ,

@@ -4,24 +4,6 @@
     padding: 0 48px;
 }
 
-.action-button{
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #23A3FF;
-    background: transparent;
-    padding: 9px 12px;
-    border-radius: 30px;
-    cursor: pointer;
-    border: 2px solid #23A3FF;
-    transition: .12s ease;
-    isolation: isolate;
-}
-.action-button:hover{
-    background: #23A3FF;
-    color: white;
-}
-
 .workspace-section{
     margin-top: 20px;
 }

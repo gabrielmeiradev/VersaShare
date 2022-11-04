@@ -1,8 +1,13 @@
 <div class="modal-container">
     <div class="modal">
         <h2 class="modal-title">{{modal-title}}}</h2>
-        <div class="modal-inputs"></div>
-        <input type="button" id="botao" value="Adicionar" class="blue-button">
+        <form method="post" class="modal-form">
+            <div class="modal-inputs">
+
+            </div>
+            <button type="submit" class="blue-button">Adicionar</button>
+        </form>
+        
     </div>
 </div>
 
@@ -13,7 +18,7 @@
             inputs: 
             [
                 {
-                    name: 'folder-name',
+                    name: 'folderName',
                     type: 'text',
                     placeholder: 'Nome da pasta'
                 }
@@ -42,6 +47,7 @@
     const modalArea = document.querySelector('.modal');
     const modalTitle = document.querySelector('.modal-title');
     const modalInputs = document.querySelector('.modal-inputs');
+    const modalForm = document.querySelector('.modal-form');
 
    modalContainer.onclick = function(e) {
         if(e.target === modalContainer) {
@@ -55,17 +61,33 @@
 
     function modal(modalType){
         let currentModal = modals[modalType];
-        modalTitle.innerText = currentModal.title;
+        modalTitle.innerText= currentModal.title;
         for(var input of currentModal.inputs){
             let inputElement = document.createElement('input');
             inputElement.name = input.name; 
             inputElement.type = input.type; 
             inputElement.placeholder = input.placeholder;
             inputElement.classList.add("input-main");
+            inputElement.required = true;
             modalInputs.appendChild(inputElement);
         }
+        modalForm.action = modalFormAction(modalType);
         modalContainer.style.display = 'flex';
     }
+
+    function modalFormAction(modalType){
+        let outputAction;
+        switch(modalType){
+            case 'new-folder':
+                outputAction = `create-folder/<%= currentWorkspace %>/<%= user.workspaceId %>`;  + '/' 
+                break;
+            case 'new-contact':
+                outputAction = 'create-contact/';
+                break;
+        }
+        return outputAction;
+    }
+
 
     function closeModal(){
         modalContainer.style.display = 'none';  

@@ -1,4 +1,5 @@
 <%- include('components/navbar.ejs') %>
+<%- include('components/modal.ejs', { user, currentWorkspace }) %>
 <div id="app">
     <%- include('components/sidebar-main-page.ejs') %> 
     <div id="workspace">
@@ -21,12 +22,19 @@
             </div>
         </div>
         <div class="folders-container">
-            <div class="folder-container">
-                <div class="folder-icon darkmode-ignore" style="fill: #FFB423">
-                    <%- include('../svgs/shared-folder.ejs') %>
-                </div>
-                <p>Projeto de informática</p>
-            </div>
+            <%  if(workspaceFolders.length > 0) { 
+                for(var folder of workspaceFolders){ %>
+                <a class="link-none" href="folder/<%= folder.id %>">
+                    <div class="folder-container">
+                        <div class="folder-icon darkmode-ignore" style="fill: #FFB423">
+                            <%- include('../svgs/shared-folder.ejs') %>
+                        </div>
+                        <p><%= folder.name %></p>
+                    </div>
+                </a>
+            <% } } else { %>
+                <p>Sem pasta bobão</p>
+            <% } %>
         </div>
 
         <div class="workspace-section">

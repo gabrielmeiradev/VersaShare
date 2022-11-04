@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const expressLayouts = require('express-ejs-layouts');
 const User = require("./models/User");
+const Folder = require("./models/Folder");
 const connectToDb = require("./database/db");
 const register = require('./models/User');
 const bcrypt = require('bcrypt');
@@ -10,7 +11,9 @@ const cookieParser = require("cookie-parser");
 const crypto = require('crypto');
 
 const emailconfirmation = require('./mails/emailconfirmation');
-const { reset } = require('nodemon');
+const {
+    reset
+} = require('nodemon');
 
 // GLOBAL VARIABLES
 require('dotenv').config()
@@ -41,7 +44,7 @@ async function checkIfIsLogged(req, res, next) {
             id: req.session.userId
         })
         req.user = user;
-        if(req.session.temporary){
+        if (req.session.temporary) {
             req.temporary = true;
         } else {
             req.temporary = false;
@@ -58,15 +61,29 @@ server.set('view engine', 'ejs')
 server.use(express.static('public'))
 server.use(express.urlencoded());
 
-server.get('/', checkIfIsLogged, (req, res) => {
+server.get('/', checkIfIsLogged, async (req, res) => {
     const user = req.user;
     const temporary = req.temporary;
-    if(temporary){
+    if (temporary) {
         req.session.destroy();
     }
-    res.render('dynamic/app', {
-        user
+    let currentWorkspace = user.workspaceId;
+    // Fazer isso em todas as rotas de pastas, inclusive no Workspace
+
+    Folder.find({
+        location: currentWorkspace
+    }).exec((err, folders) => {
+        if (folders) {
+            let workspaceFolders;
+            workspaceFolders = folders
+            res.render('dynamic/app', {
+                user,
+                workspaceFolders,
+                currentWorkspace
+            })
+        }
     })
+
 })
 
 server.get('/login', async (req, res) => {
@@ -92,7 +109,7 @@ server.post('/login', async (req, res) => {
             // Setar sessão
             req.session.userId = user.id;
 
-            if(!remember){
+            if (!remember) {
                 req.session.temporary = true;
             }
 
@@ -137,6 +154,7 @@ server.post('/register', async (req, res) => {
     }).exec((err, user) => {
 
         let id = crypto.randomUUID();
+        let workspaceId = crypto.randomUUID();
 
         if (user) {
             res.render('register')
@@ -147,19 +165,18 @@ server.post('/register', async (req, res) => {
                 "username": username,
                 "email": email,
                 "password": bcrypt.hashSync(password, 10),
-                "avatarBGColor": randomDarkColor()
+                "avatarBGColor": randomDarkColor(),
+                "workspaceId": workspaceId
             });
 
-              // Enviando email de confirmação:
-              let message = {
-                html: 
-                `<h1>Confirme sua conta VersaShare:</h1><br /><a href='${process.env.DOMAIN}/activation/${id}'>Confirmar sua conta</a>`,
-                plain:
-                'Confirme sua conta. Copie o link e cole no navegador: localhost:4040/activation/' + id
-              }   
+            // Enviando email de confirmação:
+            let message = {
+                html: `<h1>Confirme sua conta VersaShare:</h1><br /><a href='${process.env.DOMAIN}/activation/${id}'>Confirmar sua conta</a>`,
+                plain: 'Confirme sua conta. Copie o link e cole no navegador: localhost:4040/activation/' + id
+            }
 
-              let userEmail = email
-              emailconfirmation(userEmail, message);
+            let userEmail = email
+            emailconfirmation(userEmail, message);
 
             res.redirect('/login');
         }
@@ -176,12 +193,11 @@ server.get('/email/:email', (req, res) => {
     User.findOne({
         email: e
     }).exec((err, user) => {
-        if(user){
+        if (user) {
             res.send({
                 response: true
             })
-        }
-        else{
+        } else {
             res.send({
                 response: false
             })
@@ -194,12 +210,11 @@ server.get('/username/:username', (req, res) => {
     User.findOne({
         username: u
     }).exec((err, user) => {
-        if(user){
+        if (user) {
             res.send({
                 response: true
             })
-        }
-        else{
+        } else {
             res.send({
                 response: false
             })
@@ -207,19 +222,55 @@ server.get('/username/:username', (req, res) => {
     })
 })
 
-
-
 server.get('/activation/:userid', async (req, res) => {
     let userID = req.params.userid;
-    User.updateOne({ id: userID },
-    {
-        $set:
-        {
+    User.updateOne({
+        id: userID
+    }, {
+        $set: {
             emailConfirmed: true
         }
     }).then(() => {
         res.redirect('/');
     })
+})
+
+server.post('/create-folder/:address/:workspaceId', async (req, res) => {
+    // Verifica se o cara que tá enviando o form é realmente o dono do workspace
+    if (req.session.userId) {
+        let address = req.params.address;
+        let workspaceId = req.params.workspaceId;
+        User.findOne({
+            id: req.session.userId
+        }).exec((err, user) => {
+            if (user) {
+                if (user.workspaceId == workspaceId) {
+                    let name = req.body.folderName;
+                    Folder.findOne({
+                        "name": name
+                    }).exec((err, folder) => {
+                        if (!folder) {
+                            Folder.create({
+                                "id": crypto.randomUUID(),
+                                "name": name,
+                                "location": address,
+                                "owner_id": user.id
+                            }).then(() => {
+                                res.redirect('/')
+                            })
+                        } else {
+                            res.send('pasta ja existe xxxtentacion')
+                        }
+                    })
+
+                } else {
+                    res.send('sai fora maladrão');
+                }
+            }
+        })
+    } else {
+        res.redirect('/');
+    }
 })
 
 
@@ -230,4 +281,3 @@ server.get('/politica-de-privacidade', (req, res) => {
 server.listen(4040, (req, res) => {
     console.log('rodando na 4040')
 })
-

@@ -1,3 +1,11 @@
+button{
+    outline: none;
+}
+
+form button{
+    width: 100%;
+}
+
 .blue-button{
     background-color: var(--primary-blue);
     color: white;
@@ -6,4 +14,24 @@
     font-size: 1rem;
     font-weight: 500;
     border-radius: 10px;
+}
+
+.action-button{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    outline: none;
+    color: #23A3FF;
+    background: transparent;
+    padding: 9px 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    border: 2px solid #23A3FF;
+    transition: .12s ease;
+    isolation: isolate;
+}
+
+.action-button:hover{
+    background: #23A3FF;
+    color: white;
 }

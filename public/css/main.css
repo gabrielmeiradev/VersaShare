@@ -44,3 +44,7 @@ button{
     gap: 18px;
 }
 
+.link-none{
+    color: var(--main-text-color);
+    text-decoration: none;    
+}
