@@ -29,7 +29,7 @@
             inputs: 
             [
                 {
-                    name: 'contact-id',
+                    name: 'contactId',
                     type: 'text',
                     placeholder: 'E-mail ou username'
                 }
@@ -69,6 +69,7 @@
             inputElement.placeholder = input.placeholder;
             inputElement.classList.add("input-main");
             inputElement.required = true;
+            inputElement.autocomplete = "off";
             modalInputs.appendChild(inputElement);
         }
         modalForm.action = modalFormAction(modalType);
@@ -82,7 +83,7 @@
                 outputAction = `create-folder/<%= currentWorkspace %>/<%= user.workspaceId %>`;  + '/' 
                 break;
             case 'new-contact':
-                outputAction = 'create-contact/';
+                outputAction = 'add-contact/';
                 break;
         }
         return outputAction;

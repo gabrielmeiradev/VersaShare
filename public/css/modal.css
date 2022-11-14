@@ -15,7 +15,7 @@
 .modal{
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 40px;
     width: 400px;
     gap: 10px;
