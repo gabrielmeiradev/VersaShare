@@ -21,6 +21,7 @@ require('dotenv').config()
 connectToDb();
 
 server.use(cookieParser());
+
 server.use(session({
     secret: 'gabrielmeira',
     resave: false,
@@ -38,6 +39,20 @@ server.use('/login', (req, res, next) => {
     res.redirect('/')
 })
 
+
+const errors = {
+    "1": "E-mail e/ou senha incorreto",
+    "2": "Pasta já existente"
+}
+
+server.use((req, res, next) => {
+    const error = req.query.error;
+
+    if(error) req.error = errors[error];
+
+    next();
+})
+
 async function checkIfIsLogged(req, res, next) {
     if (!req.session.userId) return res.redirect('/login');
 
@@ -46,8 +61,6 @@ async function checkIfIsLogged(req, res, next) {
     })
 
     req.user = user;
-
-    req.temporary = req.session.temporary;
 
     next()
 }
@@ -61,21 +74,19 @@ server.use(express.urlencoded());
 server.get('/', checkIfIsLogged, async (req, res) => {
     const user = req.user;
 
-    const temporary = req.temporary;
-    if (temporary) {
-        req.session.destroy();
-    }
-
     const currentWorkspace = user.workspaceId;
 
     // Fazer isso em todas as rotas de pastas, inclusive no Workspace
     const folders = await Folder.find({
         location: currentWorkspace
     })
+    
+    const error = req.error;
 
     const workspaceFolders = folders;
 
     res.render('dynamic/app', {
+        error,
         user,
         workspaceFolders,
         currentWorkspace
@@ -83,14 +94,10 @@ server.get('/', checkIfIsLogged, async (req, res) => {
 })
 
 server.get('/login', async (req, res) => {
-    let message = null;
-
-    let fail = ((req.query.fail) ? true : false);
-
-    if (req.query.fail) message = 'Usuário e/ou senha inválidos!';
+    const error = req.error
 
     res.render('static/login', {
-        fail
+        error
     });
 })
 
@@ -105,9 +112,9 @@ server.post('/login', async (req, res) => {
         email: email
     })
 
-    if (!user) return res.redirect('/login?fail=true')
+    if (!user) return res.redirect('/login?error=1')
 
-    if (!bcrypt.compareSync(password, user.password)) return res.redirect('/login?fail=true')
+    if (!bcrypt.compareSync(password, user.password)) return res.redirect('/login?error=1')
 
     req.session.userId = user.id;
 
@@ -179,6 +186,7 @@ server.post('/register', async (req, res) => {
     });
 
     // Enviando email de confirmação:
+    
     const message = {
 
         html: `<h1>Confirme sua conta VersaShare:</h1><br /><a href='${process.env.DOMAIN}/activation/${id}'>Confirmar sua conta</a>`,
@@ -195,9 +203,9 @@ server.post('/register', async (req, res) => {
 })
 
 server.get('/logout', (req, res) => {
-    req.session.destroy();
-
-    res.redirect('/')
+    req.session.destroy((err) => {
+        res.redirect('/')
+      })
 })
 
 server.get('/email/:email', async (req, res) => {
@@ -246,6 +254,7 @@ server.get('/activation/:userid', async (req, res) => {
     })
 })
 
+
 server.post('/create-folder/:address/:workspaceId', async (req, res) => {
     const userId = req.session.userId;
 
@@ -258,11 +267,12 @@ server.post('/create-folder/:address/:workspaceId', async (req, res) => {
         id: userId,
     });
 
+    // TODO: caso não tenha user
     if (!user) return res.send('nao tem user');
 
     const isWorkspaceFromTheSameUser = user.workspaceId === workspaceId;
 
-    // Realiza uma ação caso workspace não seja desse user 
+    // TODO: ação caso esse workspace não seja desse user -> Essa linha realiza uma ação caso workspace não seja desse user 
     if (!isWorkspaceFromTheSameUser) return res.send('sai fora malandrão');
 
     const name = req.body.folderName;
@@ -281,32 +291,28 @@ server.post('/create-folder/:address/:workspaceId', async (req, res) => {
 
         return res.redirect('/');
     }
-
-    res.send('pasta ja existe xxxtentacion');
+    // TODO: caso a pasta já exista
+    res.redirect('/?error=2');
 });
 
 server.post('/add-contact', async (req, res) => {
     if(!req.session.userId) return res.redirect('/')
 
     const contactId = req.body.contactId
+
     const sessionId = req.session.userId
 
-    const userToBeAdded = await User.find(
-        { $or: [{email: contactId}, {username: contactId}] },
+    const userToBeAdded = await User.findOne(
+        { $or: [{email: contactId}, {username: contactId}] }
     )
-    await User.insertOne({
-        id: sessionId,
 
-    })
-    .then(() => {res.redirect('/?success1')})
+    if(!userToBeAdded || userToBeAdded.id === sessionId) return res.redirect('/?error=1')
 
 
-
-    if(!user) return res.redirect('/?error=1')
-
-    
-
-    
+    await User.updateOne(
+        { id: sessionId },
+        { $push: { contacts: userToBeAdded.id } }
+    )
     
     res.redirect('/');
 })
@@ -318,8 +324,22 @@ server.get('/politica-de-privacidade', (req, res) => {
 
 })
 
+server.get('/folder/:id', async (req, res) => {
+
+    const userId = req.session.userId;
+    
+    const folderID = req.params.id
+    
+    const thisFolder = await Folder.findOne({ id: folderID });
+
+    if(!userId || userId != thisFolder['owner_id']) return res.redirect('/')
+
+    res.render('dynamic/folder-page', { thisFolder })
+
+})
+
 server.listen(4040, (req, res) => {
 
-    console.log('rodando na 4040')
+    console.log('http://localhost:4040')
     
 })

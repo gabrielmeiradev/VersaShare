@@ -85,6 +85,10 @@
     outline: none;
 }    
 
+.input-main:focus{
+    outline: 1px solid var(--primary-blue);
+}
+
 .sidebar-section-option a{
     color: black;
     text-decoration: none;

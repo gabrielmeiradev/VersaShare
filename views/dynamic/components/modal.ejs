@@ -49,12 +49,11 @@
     const modalInputs = document.querySelector('.modal-inputs');
     const modalForm = document.querySelector('.modal-form');
 
-   modalContainer.onclick = function(e) {
+    modalContainer.onclick = function(e) {
         if(e.target === modalContainer) {
             closeModal();
         } 
     }   
-
     function restartModal(){
         modalInputs.innerHTML = '';
     }
@@ -68,12 +67,18 @@
             inputElement.type = input.type; 
             inputElement.placeholder = input.placeholder;
             inputElement.classList.add("input-main");
-            inputElement.required = true;
             inputElement.autocomplete = "off";
+            inputElement.required = true;
+            inputElement.classList.add('form-input');
             modalInputs.appendChild(inputElement);
         }
         modalForm.action = modalFormAction(modalType);
         modalContainer.style.display = 'flex';
+        setFocusOnForm();
+    }
+
+    function setFocusOnForm(){
+        document.querySelector('.form-input').focus();
     }
 
     function modalFormAction(modalType){

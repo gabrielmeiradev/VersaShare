@@ -38,6 +38,7 @@ button{
 
 .flex-row{
     display: flex;
+    align-items: center;
 }
 
 .gap-sm{
@@ -47,4 +48,18 @@ button{
 .link-none{
     color: var(--main-text-color);
     text-decoration: none;    
+}
+
+.darkmode-toggle{
+    z-index: 555;
+}
+
+.error-container{
+    padding: 20px 0;
+    display: grid;
+    place-items: center;
+    color: #c03640;
+    border-radius: 5px;
+    margin: 10px 0;
+    background: #FFDBE3;
 }

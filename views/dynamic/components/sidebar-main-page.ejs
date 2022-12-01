@@ -4,7 +4,14 @@
         <h3 class="sidebar-section-title">Pastas compartilhadas</h3>
         <div class="sidebar-section-options">
             <div class="sidebar-section-option">
-                <a href="#">Projeto de informática</a>
+                <%  if(workspaceFolders.length > 0) { 
+                    for(var folder of workspaceFolders){ %>
+                    <a href="folder/<%= folder.id %>">
+                            <p><%= folder.name %></p>
+                    </a>
+                <% } } else { %>
+                    <p>Nenhuma pasta criada.</p>
+                <% } %>
             </div>
         </div>
     </div>

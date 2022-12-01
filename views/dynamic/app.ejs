@@ -1,7 +1,7 @@
 <%- include('components/navbar.ejs') %>
 <%- include('components/modal.ejs', { user, currentWorkspace }) %>
 <div id="app">
-    <%- include('components/sidebar-main-page.ejs') %> 
+    <%- include('components/sidebar-main-page.ejs', { workspaceFolders }) %> 
     <div id="workspace">
         <h1>Workspace</h1>
         <div class="search-bar-container"> 
@@ -24,16 +24,19 @@
         <div class="folders-container">
             <%  if(workspaceFolders.length > 0) { 
                 for(var folder of workspaceFolders){ %>
-                <a class="link-none" href="folder/<%= folder.id %>">
                     <div class="folder-container">
-                        <div class="folder-icon darkmode-ignore" style="fill: #818181">
-                            <%- include('../svgs/shared-folder.ejs') %>
-                        </div>
-                        <p><%= folder.name %></p>
+                        <a class="link-none flex-row gap-sm" href="folder/<%= folder.id %>">
+                            <div class="folder-icon darkmode-ignore" style="fill: #818181">
+                                <%- include('../svgs/shared-folder.ejs') %>
+                            </div>
+                            <p><%= folder.name %></p>
+                        </a>
+                        <span class="material-symbols-outlined">
+                            more_vert
+                        </span>
                     </div>
-                </a>
             <% } } else { %>
-                <p>Sem pasta bobão</p>
+                <p>Nenhuma pasta criada.</p>
             <% } %>
         </div>
 
@@ -48,7 +51,9 @@
                     Adicionar um contato</button>
             </div>
             <div class="contacts-container">
-                
+                <% for(contact of user.contacts){ %>
+                    <p><%= contact %></p>
+                <% } %>
             </div>
         </div>
 

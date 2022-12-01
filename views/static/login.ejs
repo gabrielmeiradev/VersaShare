@@ -1,34 +1,43 @@
 <div class="login-area">
-<header class="login-header">
-    <div class="logo-container">
-        <%- include('../svgs/versashare-logo.ejs') %>
-    </div>
-    <div class="side-options"> 
-        <a href="politica-de-privacidade">Política de privacidade</a>
-    </div>
-</header>
-<main class="login-body">
-    <form class="login-elements" method="POST">
-        <div class="intro">
-            <h2 class="hello">Iniciar sessão</h2>
-            <p class="desc">Entre na sua conta VersaShare</p>
+    <header class="login-header">
+        <div class="logo-container">
+            <%- include('../svgs/versashare-logo.ejs') %>
         </div>
-        <div class="input">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" autocomplete="on" required>
+        <div class="side-options">
+            <a href="politica-de-privacidade">Política de privacidade</a>
         </div>
-        <div class="input">
-            <label for="senha">Senha</label>
-            <input type="password" name="password" id="password" required minlength="5">
-        </div>
-        <div class="remember-me-area">
-            <input type="checkbox" name="remember" id="remember-me" value="true"><label for="remember">Lembrar dessa conta</label>
-        </div>
-        <button type="submit" class="darkmode-ignore">Fazer login</button>
-        <p class="without-account-ask">Não tem conta? <a href="register">Cadastre-se</a></p>
-    </form>
-</main> 
-<footer>
-    <p>Copyright © 2022 VersaShare</p>
-</footer>
+    </header>
+    <main class="login-body">
+        <form class="login-elements" method="POST">
+            <div class="intro">
+                <h2 class="hello">Iniciar sessão</h2>
+                <p class="desc">Entre na sua conta VersaShare</p>
+            </div>
+            <div class="input">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" autocomplete="on" required>
+            </div>
+            <div class="input">
+                <label for="senha">Senha</label>
+                <input type="password" name="password" id="password" required minlength="5">
+            </div>
+            <div class="remember-me-area">
+                <input type="checkbox" name="remember" id="remember-me" value="true"><label for="remember">Lembrar dessa
+                    conta</label>
+            </div>
+
+            <% if(error){ %>
+            <div class="error-container">
+                <div class="error">
+                    <%= error %>
+                </div>
+            </div>
+            <% } %>
+            <button type="submit" class="darkmode-ignore">Fazer login</button>
+            <p class="without-account-ask">Não tem conta? <a href="register">Cadastre-se</a></p>
+        </form>
+    </main>
+    <footer>
+        <p>Copyright © 2022 VersaShare</p>
+    </footer>
 </div>
