@@ -42,7 +42,9 @@ server.use('/login', (req, res, next) => {
 
 const errors = {
     "1": "E-mail e/ou senha incorreto",
-    "2": "Pasta já existente"
+    "2": "Pasta já existente",
+    "3": "Usuário não encontrado",
+    "4": "Usuário já adicionado"
 }
 
 server.use((req, res, next) => {
@@ -83,10 +85,20 @@ server.get('/', checkIfIsLogged, async (req, res) => {
     
     const error = req.error;
 
+    const contacts = []
+
+    for(var contact of user.contacts){
+        const thisContact = await User.findOne(
+            {id: contact}
+        )
+        contacts.push(thisContact.name)
+    }
+
     const workspaceFolders = folders;
 
     res.render('dynamic/app', {
         error,
+        contacts,
         user,
         workspaceFolders,
         currentWorkspace
@@ -306,14 +318,17 @@ server.post('/add-contact', async (req, res) => {
         { $or: [{email: contactId}, {username: contactId}] }
     )
 
-    if(!userToBeAdded || userToBeAdded.id === sessionId) return res.redirect('/?error=1')
+    if(!userToBeAdded || userToBeAdded.id === sessionId) return res.redirect('/?error=3')
 
-
-    await User.updateOne(
-        { id: sessionId },
-        { $push: { contacts: userToBeAdded.id } }
+    const user = await User.findOne(
+        {id: sessionId}
     )
-    
+    const isUserAlreadyAdded = user.contacts.some(contact => contact === userToBeAdded.id)
+    if(isUserAlreadyAdded) return res.redirect('/?error=4')
+        await User.updateOne(
+            { id: sessionId },
+            { $push: { contacts: userToBeAdded.id } }
+        )
     res.redirect('/');
 })
 
