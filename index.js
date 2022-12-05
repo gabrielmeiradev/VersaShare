@@ -42,19 +42,24 @@ server.use('/login', (req, res, next) => {
 
 const errors = {
     "1": "E-mail e/ou senha incorreto",
-    "2": "Pasta já existente"
+    "2": "Pasta já existente",
+    "3": "Usuário não encontrado",
+    "4": "Usuário já adicionado"
 }
 
 server.use((req, res, next) => {
     const error = req.query.error;
 
-    if(error) req.error = errors[error];
+    if (error) req.error = errors[error];
 
     next();
 })
 
 async function checkIfIsLogged(req, res, next) {
-    if (!req.session.userId) return res.redirect('/login');
+    if (!req.session.userId) {
+        server.set('layout', 'main');
+        return res.redirect('/login')
+    };
 
     const user = await User.findOne({
         id: req.session.userId
@@ -71,22 +76,48 @@ server.set('view engine', 'ejs')
 server.use(express.static('public'))
 server.use(express.urlencoded());
 
-server.get('/', checkIfIsLogged, async (req, res) => {
+async function returnBasics(req, res, next) {
+    const user = await User.findOne({
+        id: req.session.userId
+    })
+
+    const folders = await Folder.find({
+        location: user.workspaceId
+    })
+
+    const contacts = []
+
+    for (var contact of user.contacts) {
+        const thisContact = await User.findOne({
+            id: contact
+        })
+        contacts.push(thisContact)
+    }
+
+    req.folders = folders;
+    req.contacts = contacts;
+    req.user = user;
+
+    next();
+}
+
+server.get('/', checkIfIsLogged, returnBasics, async (req, res) => {
     const user = req.user;
+    const workspaceFolders = req.folders;
+    const contacts = req.contacts;
 
     const currentWorkspace = user.workspaceId;
 
     // Fazer isso em todas as rotas de pastas, inclusive no Workspace
-    const folders = await Folder.find({
-        location: currentWorkspace
-    })
-    
+
+
     const error = req.error;
 
-    const workspaceFolders = folders;
+    server.set('layout', 'app-body');
 
     res.render('dynamic/app', {
         error,
+        contacts,
         user,
         workspaceFolders,
         currentWorkspace
@@ -186,7 +217,7 @@ server.post('/register', async (req, res) => {
     });
 
     // Enviando email de confirmação:
-    
+
     const message = {
 
         html: `<h1>Confirme sua conta VersaShare:</h1><br /><a href='${process.env.DOMAIN}/activation/${id}'>Confirmar sua conta</a>`,
@@ -205,7 +236,7 @@ server.post('/register', async (req, res) => {
 server.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         res.redirect('/')
-      })
+    })
 })
 
 server.get('/email/:email', async (req, res) => {
@@ -281,39 +312,69 @@ server.post('/create-folder/:address/:workspaceId', async (req, res) => {
         name: name,
     });
 
+    let id = crypto.randomUUID();
+
     if (!folder || folder.owner_id !== userId) {
         await Folder.create({
-            id: crypto.randomUUID(),
+            id: id,
             name: name,
             location: address,
             owner_id: user.id,
-        });
+        })
 
-        return res.redirect('/');
+        if (address === workspaceId) {
+            return res.redirect('/');
+        } else {
+            return res.redirect('/folder/' + id)
+        }
+
     }
-    // TODO: caso a pasta já exista
+
     res.redirect('/?error=2');
 });
 
 server.post('/add-contact', async (req, res) => {
-    if(!req.session.userId) return res.redirect('/')
+    if (!req.session.userId) return res.redirect('/')
 
     const contactId = req.body.contactId
 
     const sessionId = req.session.userId
 
-    const userToBeAdded = await User.findOne(
-        { $or: [{email: contactId}, {username: contactId}] }
-    )
+    const userToBeAdded = await User.findOne({
+        $or: [{
+            email: contactId
+        }, {
+            username: contactId
+        }]
+    })
 
-    if(!userToBeAdded || userToBeAdded.id === sessionId) return res.redirect('/?error=1')
+    if (!userToBeAdded || userToBeAdded.id === sessionId) return res.redirect('/?error=3')
 
+    const user = await User.findOne({
+        id: sessionId
+    })
 
-    await User.updateOne(
-        { id: sessionId },
-        { $push: { contacts: userToBeAdded.id } }
-    )
+    const isUserAlreadyAdded = user.contacts.some(contact => contact === userToBeAdded.id)
+    if (isUserAlreadyAdded) return res.redirect('/?error=4')
     
+    const addToUser1 = await User.updateOne({
+        id: user.id
+    }, {
+        $push: {
+            contacts: userToBeAdded.id
+        }
+    })
+
+    const addToUser2 = await User.updateOne({
+        id: userToBeAdded.id
+    }, {
+        $push: {
+            contacts: user.id
+        }
+    })
+
+    Promise.all([addToUser1, addToUser2]);
+
     res.redirect('/');
 })
 
@@ -324,22 +385,82 @@ server.get('/politica-de-privacidade', (req, res) => {
 
 })
 
-server.get('/folder/:id', async (req, res) => {
+server.get('/folder/:id', checkIfIsLogged, returnBasics, async (req, res) => {
 
     const userId = req.session.userId;
-    
+
     const folderID = req.params.id
-    
-    const thisFolder = await Folder.findOne({ id: folderID });
 
-    if(!userId || userId != thisFolder['owner_id']) return res.redirect('/')
+    const thisFolder = await Folder.findOne({
+        id: folderID
+    });
 
-    res.render('dynamic/folder-page', { thisFolder })
+    const user = req.user;
 
+    const currentWorkspace = thisFolder.id;
+
+    const workspaceFolders = req.folders;
+
+    const contacts = req.contacts;
+
+    if (!userId || userId != thisFolder['owner_id']) return res.redirect('/')
+
+    res.render('dynamic/folder-page', {
+        thisFolder,
+        user,
+        currentWorkspace,
+        workspaceFolders,
+        contacts
+    })
+
+})
+
+server.get('/delete-folder/:id', async (req, res) => {
+
+    const folderID = req.params.id;
+
+    // const folder = Folder.findOne({id: folderID});
+
+    await Folder.deleteOne({
+        id: folderID
+    })
+
+    res.redirect('/')
+
+
+})
+
+server.post('/rename-folder/', async (req, res) => {
+
+    const folderID = req.body.originalFolderId;
+
+    const newName = req.body.newName;
+
+    const thisFolder = await Folder.findOne({
+        id: folderID
+    });
+
+    if (!thisFolder) return res.redirect('/');
+
+    const foldersFromSameWorkspace = await Folder.find({
+        location: thisFolder.location
+    })
+
+    if (foldersFromSameWorkspace.some(folder => folder.name == newName)) {
+        return res.redirect('/?erro=2')
+    }
+
+    await Folder.updateOne({
+        id: folderID
+    }, {
+        name: newName
+    })
+
+    res.redirect('/');
 })
 
 server.listen(4040, (req, res) => {
 
     console.log('http://localhost:4040')
-    
+
 })

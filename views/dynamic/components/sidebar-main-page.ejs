@@ -6,11 +6,11 @@
             <div class="sidebar-section-option">
                 <%  if(workspaceFolders.length > 0) { 
                     for(var folder of workspaceFolders){ %>
-                    <a href="folder/<%= folder.id %>">
+                    <a href="/folder/<%= folder.id %>">
                             <p><%= folder.name %></p>
                     </a>
                 <% } } else { %>
-                    <p>Nenhuma pasta criada.</p>
+                    <p class="none-feedback">Nenhuma pasta criada</p>
                 <% } %>
             </div>
         </div>
@@ -20,7 +20,14 @@
         <h3 class="sidebar-section-title">Contatos diretos</h3>
         <div class="sidebar-section-options">
             <div class="sidebar-section-option">
-                
+                <%  if(contacts.length > 0) { 
+                    for(var contact of contacts){ %>
+                    <a href="/contact/<%= contact.id %>">
+                            <p><%= contact.name %></p>
+                    </a>
+                <% } } else { %>
+                    <p class="none-feedback">Nenhum contato adicionado</p>
+                <% } %>
             </div>
         </div>
     </div>

@@ -1,0 +1,86 @@
+
+.folder-desc {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.folder-desc .folder-info {
+    display: flex;
+    align-items: center;
+}
+
+.folder-desc .contact-img {
+    width: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.folder-desc .folder-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.folder-info .folder-name {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.folder-info .icons-folder-header {
+    margin-right: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    align-items: center;
+}
+
+.folder-desc .icons-folder {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.icon-folder{
+    height: 55px;
+}
+
+.folder-page .search-bar {
+    display: flex;
+    justify-content: center;
+}
+
+.folder-page .search-bar input {
+    width: 96%;
+    background-color: rgb(231, 231, 231);
+    color: rgb(53, 53, 53);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+
+.file-container .file-info {
+    display: flex;
+    align-items: center;
+}
+
+.file-info .size-file {
+    margin: 0px 20px;
+    font-size: 0.5rem;
+    color: rgb(50, 49, 49);
+    
+}
+
+
+.file-aside .aside-icons {
+    display: flex;
+    gap: 20px;
+}
+
+#icons {
+    cursor: pointer;
+}

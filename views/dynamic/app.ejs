@@ -1,62 +1,45 @@
-<%- include('components/navbar.ejs') %>
-<%- include('components/modal.ejs', { user, currentWorkspace }) %>
-<div id="app">
-    <%- include('components/sidebar-main-page.ejs', { workspaceFolders }) %> 
-    <div id="workspace">
-        <h1>Workspace</h1>
-        <div class="search-bar-container"> 
-            <form method="get" action="/"> 
-                <input placeholder="Pesquise no workspace" name="q" class="input-main" autocomplete="off">
-            </form>
-        </div>
-        <!-- TODO: Workspace folders-->
-        <div class="workspace-section">
-            <div class="workspace-section-title">
-                <h2>Pastas compartilhadas</h2>
-                <button onclick="modal('new-folder')" class="action-button">
-                    <span class="material-symbols-outlined">
-                        add
-                    </span> <!-- + -->
+<div id="workspace">
+    <h1>Workspace</h1>
+    <div class="search-bar-container">
+        <form method="get">
+            <input placeholder="Pesquise no workspace" name="q" class="input-main" autocomplete="off">
+        </form>
+    </div>
+    <div class="workspace-section">
+        <div class="workspace-section-title">
+            <h2>Pastas compartilhadas</h2>
+            <button onclick="modal('new-folder')" class="action-button">
+                <span class="material-symbols-outlined">
+                    add
+                </span> <!-- + -->
 
-                    Criar uma pasta</button>
-            </div>
+                Criar uma pasta</button>
         </div>
-        <div class="folders-container">
-            <%  if(workspaceFolders.length > 0) { 
-                for(var folder of workspaceFolders){ %>
-                    <div class="folder-container">
-                        <a class="link-none flex-row gap-sm" href="folder/<%= folder.id %>">
-                            <div class="folder-icon darkmode-ignore" style="fill: #818181">
-                                <%- include('../svgs/shared-folder.ejs') %>
-                            </div>
-                            <p><%= folder.name %></p>
-                        </a>
-                        <span class="material-symbols-outlined">
-                            more_vert
-                        </span>
-                    </div>
-            <% } } else { %>
-                <p>Nenhuma pasta criada.</p>
+    </div>
+    <div class="folders-container">
+        <%  if(workspaceFolders.length > 0) { 
+                for(var folderIndex in workspaceFolders){ %>
+        <% var folder = workspaceFolders[folderIndex]; %>
+        <%- include('components/folder/folder-component.ejs', { folderIndex, folder }) %>
+        <% } } else { %>
+        <p class="none-feedback">Nenhuma pasta criada</p>
+        <% } %>
+    </div>
+
+    <div class="workspace-section">
+        <div class="workspace-section-title">
+            <h2>Contatos diretos</h2>
+            <button onclick="modal('new-contact')" class="action-button">
+                <span class="material-symbols-outlined">
+                    add
+                </span> <!-- + -->
+
+                Adicionar um contato</button>
+        </div>
+        <div class="contacts-container">
+            <% for(contact of contacts){ %>
+            <p><%= contact.name %></p>
             <% } %>
         </div>
-
-        <div class="workspace-section">
-            <div class="workspace-section-title">
-                <h2>Contatos diretos</h2>
-                <button onclick="modal('new-contact')" class="action-button">
-                    <span class="material-symbols-outlined">
-                        add
-                    </span> <!-- + -->
-
-                    Adicionar um contato</button>
-            </div>
-            <div class="contacts-container">
-                <% for(contact of user.contacts){ %>
-                    <p><%= contact %></p>
-                <% } %>
-            </div>
-        </div>
-
     </div>
-</div>
 </div>

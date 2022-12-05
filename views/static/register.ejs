@@ -43,6 +43,9 @@
                 <label for="senha">Senha</label>
                 <input type="password" name="password" id="password" required minlength="5">
             </div>
+            <div class="checkbox-area">
+                <input type="checkbox" name="show-password" id="showPasswordToggle"><label for="show-password">Mostrar senha</label>
+            </div>
             <button type="submit" id="submit-button" class="darkmode-ignore">Cadastrar</button>
             <p class="without-account-ask">Já tem uma conta? <a href="login">Entre nela</a></p>
         </form>
@@ -123,4 +126,10 @@
             submitButton.disabled = false;
         }
     }
+
+    const passwordToggle = document.querySelector('#showPasswordToggle')
+    const passwordInput = document.querySelector('#password')
+    passwordToggle.addEventListener('change', (s) => {
+        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    })
 </script>

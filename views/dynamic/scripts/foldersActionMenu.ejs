@@ -1,0 +1,77 @@
+<style>
+    .folder-menu-actions{
+        background: white;
+        border-radius: 8px;
+        backdrop-filter: blur(40px);
+        display: none;
+        position: absolute;
+        box-shadow: 0px 0px 16px 5px rgba(0, 0, 0, .08);
+        z-index: 998;
+        flex-direction: column;
+        padding: 15px 0;
+    }
+    
+    .folder-menu-action{
+        display: flex;
+        font-size: .9rem;
+        padding: 10px 20px;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .folder-menu-action span {
+        font-size: 1.3rem;
+    }
+
+    .folder-menu-action:hover{
+        background: rgba(0, 0, 0, .03)
+    }
+</style>
+<div class="folder-menu-actions">
+    <a class="folder-menu-action" id="delete-button" style="color: rgb(232, 45, 45); text-decoration: none;">
+        <span class="material-symbols-outlined">
+            delete
+        </span>
+        Excluir permantemente
+    </a>
+    <a class="folder-menu-action" id="rename-button">
+        Renomear
+    </a>
+    <a class="folder-menu-action">
+        Compartilhar
+    </a>
+</div>
+
+<script>
+    let folderInChangingId;
+    const folderActionMenu = document.querySelector('.folder-menu-actions');
+    const deleteButton = document.querySelector('#delete-button');
+    const renameButton = document.querySelector('#rename-button');
+    let someOptionMenuIsOpen = false;
+    function openMenuOptionFolder(folderIndex, folderId, event){
+        deleteButton.href = `/delete-folder/${folderId}`;
+        modals['rename-folder']['inputs'][1]['value'] = folderId;
+        renameButton.addEventListener('click', () => {
+            closeMenuOptionFolders()
+            restartModal();
+            modal('rename-folder')
+        })
+        let mouseX = event.screenX;
+        let mouseY = event.screenY;
+        folderActionMenu.style.display = 'flex';
+        folderActionMenu.style.transform = `translate(${mouseX}px, ${mouseY-150}px)`;
+        someOptionMenuIsOpen = true;
+    }
+
+    function closeMenuOptionFolders(){
+            folderActionMenu.style.display = 'none';
+            someOptionMenuIsOpen = false;
+    }
+
+    document.addEventListener('click', event => {
+        if(!folderActionMenu.contains(event.target) && event.target.className !== 'material-symbols-outlined'){
+            closeMenuOptionFolders()
+        }  
+    })
+</script>

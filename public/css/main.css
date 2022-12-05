@@ -3,6 +3,7 @@
 @import 'app.css';
 @import 'modal.css';
 @import 'buttons.css';
+@import 'folder-page.css';
 
 ::selection{
     z-index: 999;
@@ -62,4 +63,16 @@ button{
     border-radius: 5px;
     margin: 10px 0;
     background: #FFDBE3;
+}
+
+.tabulator{
+    border: none !important;
+}
+.tabulator-row-odd, .tabulator-row-even, .tabulator-header, .tabulator-headers, .tabulator-col-content, .tabulator-col, .tabulator-sortable, .tabulator-cell{
+    background: white !important;
+    border: none !important;
+}
+
+.tabulator-headers{
+    color: #A6A6A6;
 }

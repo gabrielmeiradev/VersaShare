@@ -1,0 +1,11 @@
+<div class="folder-container">
+    <a class="link-none flex-row gap-sm" href="folder/<%= folder.id %>">
+        <div class="folder-icon darkmode-ignore" style="fill: #818181">
+            <%- include('../../../svgs/shared-folder.ejs') %>
+        </div>
+        <p><%= folder.name %></p>
+    </a>
+    <span class="material-symbols-outlined" onclick="openMenuOptionFolder(<%= folderIndex %>, '<%= folder.id %>', event)">
+        more_vert
+    </span>
+</div>

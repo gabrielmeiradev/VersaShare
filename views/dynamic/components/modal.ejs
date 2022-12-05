@@ -34,6 +34,21 @@
                     placeholder: 'E-mail ou username'
                 }
             ]
+        },
+        "rename-folder": {
+            title: 'Renomear pasta',
+            inputs: [
+                {
+                    name: 'newName',
+                    type: 'text',
+                    placeholder: 'Digite o novo nome'
+                }, 
+                {
+                    name: 'originalFolderId',
+                    type: 'hidden',
+                    value: folderInChangingId
+                }
+            ]
         }
     }
 
@@ -54,9 +69,6 @@
             closeModal();
         } 
     }   
-    function restartModal(){
-        modalInputs.innerHTML = '';
-    }
 
     function modal(modalType){
         let currentModal = modals[modalType];
@@ -65,6 +77,8 @@
             let inputElement = document.createElement('input');
             inputElement.name = input.name; 
             inputElement.type = input.type; 
+            inputElement.value = input.value || '';
+
             inputElement.placeholder = input.placeholder;
             inputElement.classList.add("input-main");
             inputElement.autocomplete = "off";
@@ -85,19 +99,25 @@
         let outputAction;
         switch(modalType){
             case 'new-folder':
-                outputAction = `create-folder/<%= currentWorkspace %>/<%= user.workspaceId %>`;  + '/' 
+                outputAction = `/create-folder/<%= currentWorkspace %>/<%= user.workspaceId %>`;  + '/' 
                 break;
             case 'new-contact':
                 outputAction = 'add-contact/';
                 break;
+            case 'rename-folder':
+                outputAction = 'rename-folder/';
+                break;
         }
         return outputAction;
     }
-
+    
+    function restartModal(){
+        modalInputs.innerHTML = '';
+    }
 
     function closeModal(){
-        modalContainer.style.display = 'none';  
         restartModal();
+        modalContainer.style.display = 'none';  
     }
     
 </script>

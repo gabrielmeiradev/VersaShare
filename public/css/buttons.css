@@ -36,3 +36,15 @@ form button{
     background: #23A3FF;
     color: white;
 }
+
+.btn-app{
+    display: flex !important;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    border: none;
+    gap: 6px;
+    background: #FFE2B8;
+    border-radius: 10px;
+}
