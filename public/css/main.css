@@ -64,15 +64,3 @@ button{
     margin: 10px 0;
     background: #FFDBE3;
 }
-
-.tabulator{
-    border: none !important;
-}
-.tabulator-row-odd, .tabulator-row-even, .tabulator-header, .tabulator-headers, .tabulator-col-content, .tabulator-col, .tabulator-sortable, .tabulator-cell{
-    background: white !important;
-    border: none !important;
-}
-
-.tabulator-headers{
-    color: #A6A6A6;
-}

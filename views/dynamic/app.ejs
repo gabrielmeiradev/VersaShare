@@ -38,7 +38,20 @@
         </div>
         <div class="contacts-container">
             <% for(contact of contacts){ %>
-            <p><%= contact.name %></p>
+            <a href="contact/<%=contact.id%>" style="color: black; text-decoration: none">
+                <div class="contact" style="margin: 0;">
+                    <div class="navbar-icon darkmode-ignore">
+                        <span class="profile-icon"
+                            style="color: white; background-color: <%= contact.avatarBGColor %>;">
+                            <%= contact.name[0] %>
+                        </span>
+                    </div>
+                    <p><%= contact.name %></p>
+                </div>
+            </a>
+            <% } %>
+            <% if (contacts.length === 0) { %>
+            <p class="none-feedback">Nenhum contato adicionado</p>
             <% } %>
         </div>
     </div>

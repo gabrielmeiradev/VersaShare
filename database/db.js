@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectToDb = () => {
   mongoose
-    .connect('senha aqui', {
+    .connect('', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

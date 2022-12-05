@@ -1,7 +1,7 @@
 #app{
     display: grid;
     grid-template-columns: 1fr 3fr;
-    padding: 0 48px;
+    padding: 0 28px;
 }
 
 .workspace-section{
@@ -96,4 +96,9 @@
 
 .none-feedback{
     color: rgba(0, 0, 0, .6)
+}
+
+.close-button-modal{
+    color: rgba(0, 0, 0, .6);
+    cursor: pointer;
 }

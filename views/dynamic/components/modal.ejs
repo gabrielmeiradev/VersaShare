@@ -1,13 +1,19 @@
 <div class="modal-container">
     <div class="modal">
-        <h2 class="modal-title">{{modal-title}}}</h2>
+        <header>
+            <h2 class="modal-title">{{modal-title}}}</h2>
+            <div class="close-button-modal" onclick="closeModal()">
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+        </header>
         <form method="post" class="modal-form">
             <div class="modal-inputs">
 
             </div>
             <button type="submit" class="blue-button">Adicionar</button>
         </form>
-        
     </div>
 </div>
 
@@ -102,10 +108,10 @@
                 outputAction = `/create-folder/<%= currentWorkspace %>/<%= user.workspaceId %>`;  + '/' 
                 break;
             case 'new-contact':
-                outputAction = 'add-contact/';
+                outputAction = '/add-contact/';
                 break;
             case 'rename-folder':
-                outputAction = 'rename-folder/';
+                outputAction = '/rename-folder/';
                 break;
         }
         return outputAction;

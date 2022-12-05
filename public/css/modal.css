@@ -35,3 +35,8 @@
     width: 100%;
 }
 
+.modal header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

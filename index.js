@@ -9,7 +9,6 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const cookieParser = require("cookie-parser");
 const crypto = require('crypto');
-
 const emailconfirmation = require('./mails/emailconfirmation');
 const {
     reset
@@ -325,7 +324,7 @@ server.post('/create-folder/:address/:workspaceId', async (req, res) => {
         if (address === workspaceId) {
             return res.redirect('/');
         } else {
-            return res.redirect('/folder/' + id)
+            return res.redirect('/folder/' + address)
         }
 
     }
@@ -399,6 +398,10 @@ server.get('/folder/:id', checkIfIsLogged, returnBasics, async (req, res) => {
 
     const currentWorkspace = thisFolder.id;
 
+    const foldersOfWorkspace = await Folder.find({
+        location: currentWorkspace
+    })
+
     const workspaceFolders = req.folders;
 
     const contacts = req.contacts;
@@ -410,7 +413,8 @@ server.get('/folder/:id', checkIfIsLogged, returnBasics, async (req, res) => {
         user,
         currentWorkspace,
         workspaceFolders,
-        contacts
+        contacts,
+        foldersOfWorkspace 
     })
 
 })
@@ -419,13 +423,20 @@ server.get('/delete-folder/:id', async (req, res) => {
 
     const folderID = req.params.id;
 
-    // const folder = Folder.findOne({id: folderID});
+    const folder = await Folder.findOne({id: folderID});
+
+    const user = await User.findOne({id: req.session.userId})
 
     await Folder.deleteOne({
         id: folderID
     })
 
-    res.redirect('/')
+    if(folder.location == user.workspaceId){
+        res.redirect('/')
+    } else {
+        res.redirect('/folder/' + folder.location)
+    }
+
 
 
 })
@@ -456,7 +467,13 @@ server.post('/rename-folder/', async (req, res) => {
         name: newName
     })
 
-    res.redirect('/');
+    const user = User.findOne({id: req.session.userId});
+
+    if(thisFolder.location === user.workspaceId){
+        res.redirect('/');
+    } else {
+        res.redirect('/folder/' + thisFolder.location)
+    }
 })
 
 server.listen(4040, (req, res) => {
