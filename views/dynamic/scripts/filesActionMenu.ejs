@@ -1,0 +1,76 @@
+<style>
+    .file-menu-actions{
+        background: white;
+        border-radius: 8px;
+        backdrop-filter: blur(40px);
+        display: none;
+        position: absolute;
+        box-shadow: 0px 0px 16px 5px rgba(0, 0, 0, .08);
+        z-index: 998;
+        flex-direction: column;
+        padding: 15px 0;
+    }
+    
+    .file-menu-action{
+        display: flex;
+        font-size: .9rem;
+        padding: 10px 20px;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .file-menu-action span {
+        font-size: 1.3rem;
+    }
+
+    .file-menu-action:hover{
+        background: rgba(0, 0, 0, .03)
+    }
+</style>
+<div class="file-menu-actions">
+    <a class="file-menu-action" id="delete-file-button" style="color: rgb(232, 45, 45); text-decoration: none;">
+        <span class="material-symbols-outlined">
+            delete
+        </span>
+        Excluir
+    </a>
+    <a class="file-menu-action" id="rename-file-button">
+        Renomear
+    </a>
+    <a class="file-menu-action" id="download-file-button" style="color: #000000; text-decoration: none;">
+        Baixar
+    </a>
+</div>
+
+<script>
+    const fileActionMenu = document.querySelector('.file-menu-actions');
+    const deleteFileButton = document.querySelector('#delete-file-button');
+    const downloadFileButton = document.querySelector('#download-file-button');
+    const renameFileButton = document.querySelector('#rename-file-button');
+    function openMenuOptionFile(fileIndex, fileId, event){
+        deleteFileButton.href = `/delete-file/${fileId}`;
+        downloadFileButton.href = `/download/${fileId}`;
+        downloadFileButton.download = document.querySelector('#file-name-'+fileIndex).innerHTML;
+        modals['rename-file']['inputs'][1]['value'] = fileId;
+        renameFileButton.addEventListener('click', () => {
+            closeMenuOptionfiles()
+            restartModal();
+            modal('rename-file')
+        })
+        let mouseX = event.screenX;
+        let mouseY = event.screenY;
+        fileActionMenu.style.display = 'flex';
+        fileActionMenu.style.transform = `translate(${mouseX-150}px, ${mouseY-190}px)`;
+    }
+
+    function closeMenuOptionfiles(){
+            fileActionMenu.style.display = 'none';
+    }
+
+    document.addEventListener('click', event => {
+        if(!fileActionMenu.contains(event.target) && event.target.className !== 'material-symbols-outlined'){
+            closeMenuOptionfiles()
+        }  
+    })
+</script>

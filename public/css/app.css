@@ -85,6 +85,10 @@
     outline: none;
 }    
 
+.input-main::placeholder{
+    color: #BABABA;
+}
+
 .input-main:focus{
     outline: 1px solid var(--primary-blue);
 }
@@ -101,4 +105,13 @@
 .close-button-modal{
     color: rgba(0, 0, 0, .6);
     cursor: pointer;
+}
+
+.empty-state{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    margin-top: 50px;
+    color: rgba(0, 0, 0,.7)
 }

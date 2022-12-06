@@ -1,3 +1,11 @@
+<%- include('components/modal.ejs', { user, currentWorkspace }) %>
+<% if(error) {%>
+<div class="app-error-container">
+    <div class="app-error">
+        <%= error %>
+    </div>
+</div>
+<%}%>
 <div id="workspace">
     <h1>Workspace</h1>
     <div class="search-bar-container">
@@ -22,7 +30,7 @@
         <% var folder = workspaceFolders[folderIndex]; %>
         <%- include('components/folder/folder-component.ejs', { folderIndex, folder }) %>
         <% } } else { %>
-        <p class="none-feedback">Nenhuma pasta criada</p>
+        <p class="none-feedback">Nenhuma pasta criada <span class="darkmode-ignore">😔</span> </p>
         <% } %>
     </div>
 
@@ -38,20 +46,10 @@
         </div>
         <div class="contacts-container">
             <% for(contact of contacts){ %>
-            <a href="contact/<%=contact.id%>" style="color: black; text-decoration: none">
-                <div class="contact" style="margin: 0;">
-                    <div class="navbar-icon darkmode-ignore">
-                        <span class="profile-icon"
-                            style="color: white; background-color: <%= contact.avatarBGColor %>;">
-                            <%= contact.name[0] %>
-                        </span>
-                    </div>
-                    <p><%= contact.name %></p>
-                </div>
-            </a>
+            <%- include('components/contacts/direct-contact-profile.ejs', { contact }) %>
             <% } %>
             <% if (contacts.length === 0) { %>
-            <p class="none-feedback">Nenhum contato adicionado</p>
+            <p class="none-feedback">Nenhum contato adicionado <span class="darkmode-ignore">😔</span></p>
             <% } %>
         </div>
     </div>

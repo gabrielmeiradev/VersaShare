@@ -1,0 +1,90 @@
+<div id="chat">
+    <div class="chat-header">
+        <h2><%= usersConversation.name %></h2>
+        <span class="chat-contact-username">@<%= usersConversation.username %></span>
+    </div>
+    <div class="messages">
+        <div class="message-row">
+            <div class="message-row-content other">
+                <div class="other-info">
+                    <div class="other-photo" style="background: <%= usersConversation.avatarBGColor %>">
+                        <p><%= usersConversation.name[0] %></p>
+                    </div>
+                    <p><%= usersConversation.name %></p>
+                    <span class="message-date">às 06:58</span>
+                </div>
+                <div class="message-container">
+                    <div class="message-content">
+                        Bom dia
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="message-row user">
+            <div class="message-row-content user">
+                <span class="message-date">
+                    07:32
+                </span>
+                <div class="message-content" id="message1" contenteditable="true">
+                    Bom dia, <%= usersConversation.name.split(' ')[0] %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="chat-input"  id="message-form">
+        <input class="input-main" id="message-input" placeholder="Digite uma mensagem..." autocomplete="off">
+    </div>
+
+</div>
+
+<script>
+    // const message1 = document.querySelector('#message1');
+    // message1.addEventListener('input', () => {
+    //     alert('auau')
+    // })
+
+    const messageInput = document.querySelector('#message-input');
+    const messageForm = document.querySelector('#message-form');
+    const messagesEle = document.querySelector('.messages');
+
+    const isValidUrl = urlString=> {
+	  	var urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
+	    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
+	    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
+	    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
+	    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
+	    '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
+	  return !!urlPattern.test(urlString);
+	}
+
+    messageForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const date = new Date();
+        const horas = date.getHours() < 10 ? '0'+date.getHours() : date.getHours();
+        const minutos = date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes();
+
+        const time = `${horas}:${minutos}`;
+
+        let text = messageInput.value;
+        if(isValidUrl(text)){
+            text = `<a href="${text}">${text}</a>`
+        }
+        let message = document.createElement('div');
+        message.innerHTML = `
+        <div class="message-row user">
+            <div class="message-row-content user">
+                <span class="message-date">
+                    ${time}
+                </span>
+                <div class="message-content" contenteditable="true">
+                    ${text}
+                </div>
+            </div>
+        </div>
+        `
+        messagesEle.appendChild(message)
+        messageInput.value = '';
+
+    })
+</script>

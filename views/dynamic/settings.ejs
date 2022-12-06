@@ -1,0 +1,53 @@
+<div id="settings">
+    <h1>Configurações</h1>
+    <section class="settings-section">
+        <h4>Notificações</h4>
+        <div class="settings-options">
+            <div class="setting-option"  onclick="toggleOption(1)">
+                <div class="flex-row setting-toggle">
+                    <h3>Notificações das equipes</h3>
+                    <span class="material-symbols-outlined setting-toggle-icon">
+                        toggle_off
+                    </span>
+                </div>
+                <p>Mensagens e arquivos recentemente enviados</p>
+            </div>
+
+            <div class="setting-option" onclick="toggleOption(2)">
+                <div class="flex-row setting-toggle" >
+                    <h3>Notificações dos contatos diretos</h3>
+                    <span class="material-symbols-outlined setting-toggle-icon">
+                        toggle_off
+                    </span>
+                </div>
+                <p>Mensagens diretas, marcações e arquivos recentemente enviados</p>
+            </div>
+
+            <div class="setting-option" onclick="toggleOption(3)">
+                <div class="flex-row setting-toggle">
+                    <h3>Tema escuro</h3>
+                    <span class="material-symbols-outlined setting-toggle-icon" onclick="toggleOption(3)">
+                        toggle_off
+                    </span>
+                </div>
+                <p>Alternar o VersaShare para o tema escuro</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    const settingToggles = document.querySelectorAll('.setting-toggle-icon');
+    function toggleOption(n){
+        let thisToggle = settingToggles[n-1];
+        if(!thisToggle.classList.contains('t_on')){
+            thisToggle.innerHTML = 'toggle_on';
+            thisToggle.style.color = '#FFBA52';
+            thisToggle.classList.add('t_on')
+        } else {
+            thisToggle.classList.remove('t_on')
+            thisToggle.innerHTML = 'toggle_off';
+            thisToggle.style.color = '#000000';
+        }
+    }
+</script>

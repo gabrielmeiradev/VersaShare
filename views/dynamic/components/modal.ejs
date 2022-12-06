@@ -55,6 +55,35 @@
                     value: folderInChangingId
                 }
             ]
+        },
+        "rename-file": {
+            title: 'Renomear arquivo',
+            inputs: [
+                {
+                    name: 'newName',
+                    type: 'text',
+                    placeholder: 'Digite o novo nome'
+                }, 
+                {
+                    name: 'originalFileId',
+                    type: 'hidden',
+                    value: 0
+                }
+            ]
+        },
+        "upload-file": {
+            title: 'Enviar arquivo(s)',
+            inputs: [
+                {
+                    name: 'arquivo',
+                    type: 'file'
+                }, 
+                {
+                    name: 'originalFolderId',
+                    type: 'hidden',
+                    value: '<%= currentWorkspace %>'
+                }
+            ]
         }
     }
 
@@ -93,6 +122,9 @@
             modalInputs.appendChild(inputElement);
         }
         modalForm.action = modalFormAction(modalType);
+        if(modalType === 'upload-file'){
+            modalForm.enctype = 'multipart/form-data';
+        }
         modalContainer.style.display = 'flex';
         setFocusOnForm();
     }
@@ -112,6 +144,12 @@
                 break;
             case 'rename-folder':
                 outputAction = '/rename-folder/';
+                break;
+            case 'upload-file':
+                outputAction = '/upload-file';
+                break;
+            case 'rename-file':
+                outputAction = '/rename-file/';
                 break;
         }
         return outputAction;

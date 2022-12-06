@@ -1,9 +1,14 @@
-<div class="container-contact">
-    <div class="contact">
-        <div class="contact-avatar darkmode-ignore" style="background-image: url('<%= contato.avatar %>')"></div>
-        <p><%= contato.nome %></p>
-    </div>
-    <div>
+<div class="contact" style="margin: 0;">
+    <a href="chat/<%=contact.id%>" style="color: black; text-decoration: none; gap: 10px" class="flex-row">
+        <div class="navbar-icon darkmode-ignore">
+            <span class="profile-icon" style="color: white; background-color: <%= contact.avatarBGColor %>;">
+                <%= contact.name[0] %>
+            </span>
+        </div>
+        <p><%= contact.name %></p>
+        <span class="chat-contact-username" style="margin-left: 0">@<%= contact.username %></span>
+    </a>
+    <div class="contact-options" style="cursor: pointer;" onclick="openMenuOptionContact('<%= contact.id %>', event)">
         <span class="material-symbols-outlined">
             more_vert
         </span>

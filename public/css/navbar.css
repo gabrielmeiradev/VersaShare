@@ -24,3 +24,26 @@
 .navbar-icon{
     cursor: pointer;
 }
+
+.expandable-menu{
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    box-sizing: border-box;
+    background: #FFBA52;
+    padding: 5px 28px;
+    display: flex;
+    gap: 20px;
+    transition: .2s ease;
+    justify-content: center;
+    transform: translateY(-300px);
+}
+
+.expandable-menu h2{
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+.expandable-menu a{
+    text-decoration: none;
+    color: black;
+}

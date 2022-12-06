@@ -1,0 +1,137 @@
+.chat-header{
+    display: flex;
+    align-items: center;
+    height: fit-content;
+}
+
+
+.message-row{
+    width: 100%;
+}
+
+.other-info{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.other-photo{
+    border-radius: 50%;
+    width: 33px;
+}
+
+.other-info {
+    display: flex;
+    align-items: center;
+}
+
+.other-info p {
+    font-weight: bold;
+    font-size: 1.0rem;
+}
+
+.messages {
+    display: flex;
+    gap: 20px;
+    height: 70vh;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.messages::-webkit-scrollbar {
+  display: none;
+}
+
+.message-date {
+    font-weight: 500;
+    font-size: 0.6rem;
+    color: rgba(0, 0, 0, .35)
+}
+
+.message-container .message-content {
+    font-size: 1.0rem;
+}
+
+.message-row {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.message-row-content.user{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.message-row-content.other{
+    margin-right: auto;
+}
+
+.message-row-content.user{
+    margin-left: auto;
+}
+
+.message-content{
+    background: #F1F1F1;
+    border-radius: 11px;
+    padding: 15px 20px;
+    width: fit-content;
+}
+
+#chat{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.input-container{
+    margin-top: auto;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.icons-input {
+    width: fit-content;
+    background-color: #FFE2B8;
+    height: 30px;
+    width: 30px;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.message-input{
+    height: 30px;
+    color: black;
+    background-color: rgb(199, 199, 199);
+    border: none;
+    flex: 1;
+}
+
+.other-photo{
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    isolation: isolate;
+}
+
+.other-photo p{
+    line-height: 0;
+    font-size: .8rem;
+    color: white;
+}
+
+.chat-input{
+    margin-top: auto;
+}
+
+.chat-contact-username{
+    color: #ccc;
+    margin-left: 10px;
+}

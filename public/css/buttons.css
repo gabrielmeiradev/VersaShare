@@ -20,6 +20,7 @@ form button{
 .action-button{
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 5px;
     outline: none;
     color: #23A3FF;
@@ -47,4 +48,18 @@ form button{
     gap: 6px;
     background: #FFE2B8;
     border-radius: 10px;
+}
+
+.btn-main-action{
+    background: #FFBA52;
+    padding: 5px 20px;
+    line-height: 0;
+    border-radius: 23px;
+    font-size: .8rem;
+    text-decoration: none;
+    color: black;
+    display: flex !important;
+    width: fit-content;
+    gap: 5px;
+    align-items: center;
 }

@@ -1,21 +1,23 @@
+<%- include('components/modal.ejs', { user, currentWorkspace }) %>
 <div class="folder-page">
     <div class="folder-desc">
         <div class="folder-info">
             <div class="icons-folder-header">
-                <a onclick="history.back()"><span class="material-symbols-outlined" style="cursor: pointer; color: black;">arrow_back_ios</span></a>
+                <a onclick="history.back()"><span class="material-symbols-outlined"
+                        style="cursor: pointer; color: black;">arrow_back_ios</span></a>
                 <div class="folder-icon darkmode-ignore" style="fill: #818181">
                     <%- include('../svgs/shared-folder.ejs') %>
                 </div>
             </div>
             <div class="folder-name">
                 <h2><%= thisFolder.name %></h2>
-            <!-- <div class="img-container">
+                <!-- <div class="img-container">
                 <img class="contact-img" src="https://pbs.twimg.com/profile_images/620358333535404032/iKNs7UJZ_400x400.png" alt="contact photo">
             </div> -->
             </div>
         </div>
         <div class="icons-folder">
-            <button class="icon-folder btn-app darkmode-ignore">
+            <button class="icon-folder btn-app darkmode-ignore" onclick="modal('upload-file')">
                 <span class="material-symbols-outlined">
                     upload
                 </span>
@@ -25,7 +27,7 @@
                 <span class="material-symbols-outlined">
                     create_new_folder
                 </span>
-                <p>Criar um pasta</p>
+                <p>Criar uma pasta</p>
             </button>
             <button class="icon-folder btn-app darkmode-ignore">
                 <span class="material-symbols-outlined">
@@ -44,12 +46,52 @@
             <input placeholder="Pesquise em <%= thisFolder.name %>" name="q" class="input-main" autocomplete="off">
         </form>
     </div>
-    
+
     <br />
 
-   <div class="data-container folders-container">
-    <% for(var folderIndex in foldersOfWorkspace) { let folder = foldersOfWorkspace[folderIndex]; %>
-        <%- include('components/folder/folder-component.ejs', { folder, folderIndex }) %>
-    <% } %>
+    <div class="data-container folders-container">
+        <% for(var folderIndex in foldersOfWorkspace) { let folder = foldersOfWorkspace[folderIndex]; %>
+            <%- include('components/folder/folder-component.ejs', { folder, folderIndex }) %>
+            <% } %>
+        </div>
+        <% if(filesOfThisFolder.length > 0){ %>
+    <div class="file-container" style="margin-top: 20px;">
+        <table style="width:100%">
+            <tr>
+                <th>Tipo</th>
+                <th>Nome do arquivo</th>
+                <th>Tamanho</th>
+                <th>Data de criação</th>
+            </tr>
+
+            <% for(var fileIndex in filesOfThisFolder) { let file = filesOfThisFolder[fileIndex] %>
+            <tr>
+                <td><%= file.mimetype.split('/')[1].toUpperCase() %></td>
+                <td id="file-name-<%= fileIndex %>"><%= file.originalname %></td>
+                <td>
+                    <% if(Math.floor(file.size / 1000000) > 0) { %>
+                    <%= Math.floor(file.size / 1000000) %>MB
+                    <% } else { %>
+                    <%= Math.floor(file.size / 1000) %>KB
+                    <% } %>
+                </td>
+                <td><%= file.creation_date %></td>
+                <td>
+                    <span style="cursor: pointer" class="material-symbols-outlined"
+                        onclick="openMenuOptionFile('<%= fileIndex %>', '<%= file.id %>', event)">
+                        more_vert
+                    </span>
+                </td>
+            </tr>
+            <% } %>
+        </table>
     </div>
+    <% } else { %>
+
+    <div class="empty-state">
+        <img height="250" src="/assets/img/illustrations/empty.svg">
+        <small>Nenhum arquivo por aqui. Adicione um :)</small>
+    </div>
+
+    <% } %>
 </div>

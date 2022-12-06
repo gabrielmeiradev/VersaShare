@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const expressLayouts = require('express-ejs-layouts');
 const User = require("./models/User");
+const File = require("./models/File");
 const Folder = require("./models/Folder");
 const connectToDb = require("./database/db");
 const register = require('./models/User');
@@ -10,6 +11,18 @@ const session = require('express-session');
 const cookieParser = require("cookie-parser");
 const crypto = require('crypto');
 const emailconfirmation = require('./mails/emailconfirmation');
+const multer  = require('multer');
+const path = require('path')
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/uploads/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname))
+    }
+  })
+
+const upload = multer({ storage: storage });
 const {
     reset
 } = require('nodemon');
@@ -41,7 +54,7 @@ server.use('/login', (req, res, next) => {
 
 const errors = {
     "1": "E-mail e/ou senha incorreto",
-    "2": "Pasta já existente",
+    "2": "Pasta já existente, crie outra com outro nome",
     "3": "Usuário não encontrado",
     "4": "Usuário já adicionado"
 }
@@ -76,22 +89,31 @@ server.use(express.static('public'))
 server.use(express.urlencoded());
 
 async function returnBasics(req, res, next) {
+    const query = req.query.q;
+
     const user = await User.findOne({
         id: req.session.userId
     })
 
-    const folders = await Folder.find({
+    let folders = await Folder.find({
         location: user.workspaceId
     })
 
-    const contacts = []
-
+    
+    let contacts = []
+    
     for (var contact of user.contacts) {
         const thisContact = await User.findOne({
             id: contact
         })
         contacts.push(thisContact)
     }
+    
+    if(query){
+        folders = folders.filter(elem => elem.name.toLowerCase().includes(query));
+        contacts = contacts.filter(elem => elem.name.toLowerCase().includes(query)) 
+    }
+
 
     req.folders = folders;
     req.contacts = contacts;
@@ -106,8 +128,6 @@ server.get('/', checkIfIsLogged, returnBasics, async (req, res) => {
     const contacts = req.contacts;
 
     const currentWorkspace = user.workspaceId;
-
-    // Fazer isso em todas as rotas de pastas, inclusive no Workspace
 
 
     const error = req.error;
@@ -309,6 +329,7 @@ server.post('/create-folder/:address/:workspaceId', async (req, res) => {
 
     const folder = await Folder.findOne({
         name: name,
+        location: address
     });
 
     let id = crypto.randomUUID();
@@ -355,7 +376,7 @@ server.post('/add-contact', async (req, res) => {
 
     const isUserAlreadyAdded = user.contacts.some(contact => contact === userToBeAdded.id)
     if (isUserAlreadyAdded) return res.redirect('/?error=4')
-    
+
     const addToUser1 = await User.updateOne({
         id: user.id
     }, {
@@ -377,6 +398,89 @@ server.post('/add-contact', async (req, res) => {
     res.redirect('/');
 })
 
+server.post('/upload-file/', upload.single('arquivo'), async (req, res) => {
+    const originalPath = req.body.originalFolderId;
+    
+    const file = req.file;
+
+    const date = new Date();
+    const month = (date.getMonth() + 1) < 10 ? '0' + date.getMonth() + 1 : date.getMonth() + 1;
+    const day = (date.getDate()) < 10 ? '0' + date.getDate(): date.getDate();
+
+    await File.create({
+        id: crypto.randomUUID(),
+        path: file.path,
+        mimetype: file.mimetype,
+        owner_id: req.session.userId,
+        originalname: file.originalname,
+        filename: file.filename,
+        size: file.size,
+        folderId: originalPath,
+        creation_date:`${day}/${month}`
+    })
+  
+    res.redirect('/folder/' + originalPath);
+  
+})
+
+server.get('/download/:fileid', async (req, res) => {
+    const fileId = req.params.fileid;
+    const file = await File.findOne({
+        id: fileId
+    })
+    res.redirect('/uploads/' + file.filename)
+})
+
+server.post('/rename-file/', checkIfIsLogged, async (req, res) => {
+    const newName = req.body.newName;
+    const fileId = req.body.originalFileId;
+
+    await File.updateOne(
+        {id: fileId},
+        {originalname: newName}
+    )
+
+    const file = await File.findOne({id: fileId})
+    res.redirect('/folder/' + file.folderId);
+})
+
+server.get('/delete-contact/:id', checkIfIsLogged, async (req, res) => {
+    const idToBeDeleted = req.params.id;
+
+    const deleteFromUser1 = await User.updateOne({
+        id: req.session.userId
+    }, {
+        $pull: {
+            'contacts': idToBeDeleted
+        }
+    })
+
+    const deleteFromUser2 = await User.updateOne({
+        id: idToBeDeleted
+    }, {
+        $pull: {
+            'contacts': req.session.userId
+        }
+    })
+
+    Promise.all([deleteFromUser1, deleteFromUser2])
+
+    res.redirect('/')
+})
+
+server.get('/delete-file/:id', checkIfIsLogged, async (req, res) => {
+
+    const fileId = req.params.id;
+
+    const file = await File.findOne({id: fileId});
+
+    await File.deleteOne({id: fileId})
+
+    if(file.owner_id === req.session.userId){
+        res.redirect('/folder/' + file.folderId);
+    }
+
+})
 
 server.get('/politica-de-privacidade', (req, res) => {
 
@@ -408,13 +512,18 @@ server.get('/folder/:id', checkIfIsLogged, returnBasics, async (req, res) => {
 
     if (!userId || userId != thisFolder['owner_id']) return res.redirect('/')
 
+    const filesOfThisFolder = await File.find({folderId: folderID}).sort({
+        createdAt: -1
+    })
+
     res.render('dynamic/folder-page', {
         thisFolder,
         user,
         currentWorkspace,
         workspaceFolders,
         contacts,
-        foldersOfWorkspace 
+        foldersOfWorkspace,
+        filesOfThisFolder
     })
 
 })
@@ -423,21 +532,23 @@ server.get('/delete-folder/:id', async (req, res) => {
 
     const folderID = req.params.id;
 
-    const folder = await Folder.findOne({id: folderID});
+    const folder = await Folder.findOne({
+        id: folderID
+    });
 
-    const user = await User.findOne({id: req.session.userId})
+    const user = await User.findOne({
+        id: req.session.userId
+    })
 
     await Folder.deleteOne({
         id: folderID
     })
 
-    if(folder.location == user.workspaceId){
+    if (folder.location == user.workspaceId) {
         res.redirect('/')
     } else {
         res.redirect('/folder/' + folder.location)
     }
-
-
 
 })
 
@@ -467,13 +578,75 @@ server.post('/rename-folder/', async (req, res) => {
         name: newName
     })
 
-    const user = User.findOne({id: req.session.userId});
+    const user = await User.findOne({
+        id: req.session.userId
+    });
 
-    if(thisFolder.location === user.workspaceId){
+    if (thisFolder.location === user.workspaceId) {
         res.redirect('/');
     } else {
         res.redirect('/folder/' + thisFolder.location)
     }
+})
+
+server.get('/settings', checkIfIsLogged, returnBasics, (req, res) => {
+    const user = req.user;
+    const workspaceFolders = req.folders;
+    const contacts = req.contacts;
+    res.render('dynamic/settings', {
+        user, workspaceFolders, contacts
+    })
+})
+
+server.get('/my-profile', checkIfIsLogged, returnBasics, (req, res) => {
+    const user = req.user;
+    const workspaceFolders = req.folders;
+    const contacts = req.contacts;
+    res.render('dynamic/profile', {
+        user, workspaceFolders, contacts
+    })
+})
+
+server.get('/chat/:id', returnBasics, checkIfIsLogged, async (req, res) => {
+    const userId = req.session.userId;
+
+    const user = req.user;
+
+    const workspaceFolders = req.folders;
+
+    const contacts = req.contacts;
+
+    const user2Id = req.params.id
+
+    const usersConversation = await User.findOne({
+        id: user2Id
+    })
+
+    res.render('dynamic/chat', {
+        user,
+        usersConversation,
+        workspaceFolders,
+        contacts
+    })
+})
+
+server.post('/update-profile', async (req, res) => {
+    const name = req.body.name;
+    const username = req.body.username;
+    const email = req.body.email;
+    const avatar = req.body.avatar;
+    
+    await User.updateOne(
+        {id: req.session.userId},
+        {$set: {
+            name: name,
+            username: username,
+            email: email,
+            avatarBGColor: avatar,
+        }},
+    )
+    
+    res.redirect('/')
 })
 
 server.listen(4040, (req, res) => {

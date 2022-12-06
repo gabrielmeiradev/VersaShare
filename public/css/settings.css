@@ -1,0 +1,42 @@
+.settings-options{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.settings-section {
+    margin: 30px 0;
+}
+
+.settings-section h3 {
+    font-weight: 400;
+    margin: 0;
+}
+
+.setting-option{
+    width: 400px;
+    padding: 31px 26px;
+    border-radius: 14px;
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    flex-direction: column;
+    box-shadow: 0px 4px 0px 9px rgba(0, 0, 0, 0.03);
+}
+
+.setting-option p {
+    color: #BFBFBF;
+    margin: 0;
+}
+
+.setting-toggle{
+    display: flex;
+    justify-content: space-between;
+}
+.material-symbols-outlined.setting-toggle-icon{
+    font-size: 1.9rem !important;
+}
+
+.setting-toggle-icon{
+    cursor: pointer;
+}

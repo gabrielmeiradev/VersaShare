@@ -6,17 +6,19 @@
     </div>
     <div class="navbar-icons-container">
         <div class="navbar-icon">
-            <span class="material-symbols-outlined">
+            <span class="material-symbols-outlined" onclick="expandMenu()">
                 menu
             </span>
         </div>
         <div class="navbar-icon">
-            <span class="material-symbols-outlined">
-                settings
-            </span>
+            <a href="/settings" style="color: black;">
+                <span class="material-symbols-outlined">
+                    settings
+                </span>
+            </a>
         </div>
         <div class="navbar-icon darkmode-ignore">
-            <a href="logout" style="text-decoration: none">
+            <a href="/my-profile" style="text-decoration: none">
                 <span class="profile-icon" style="color: white; background-color: <%= user.avatarBGColor %>;">
                     <%= user.name[0] %>
                 </span>
@@ -24,3 +26,37 @@
         </div>
     </div>
 </nav>
+
+<nav class="expandable-menu">
+    <strong><h2><a href="/my-profile">Minha conta</a></h2></strong>
+    <strong><h2><a href="/settings">Configurações</a></h2></strong>
+    <strong><h2>Ajuda</h2></strong>
+    <strong><h2><a href="/logout">Sair</a></h2></strong>
+</nav>
+
+<script>
+
+    
+    const expandableMenu = document.querySelector('.expandable-menu');
+    document.addEventListener('click', event => {
+        if(!expandableMenu.contains(event.target) && event.target.className !== 'material-symbols-outlined'){
+            closeExpand();
+        }
+    })
+
+    let expandableOpen = false;
+
+    function expandMenu(){
+        if(!expandableOpen){
+            expandableMenu.style.transform = 'translateY(0)';
+            expandableOpen = true
+        } else {
+            closeExpand();
+        }
+    }
+
+    function closeExpand(){
+            expandableMenu.style.transform = 'translateY(-300px)';
+            expandableOpen = false
+    }
+</script>

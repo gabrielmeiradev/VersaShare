@@ -1,5 +1,9 @@
 <aside class="sidebar">
-    
+    <a class="btn-main-action darkmode-ignore" href="/">
+        <span class="material-symbols-outlined icon-sm">
+            public
+        </span> 
+        <h3 class="sidebar-section-title">Voltar ao Workspace</h3></a>
     <div class="sidebar-section">
         <h3 class="sidebar-section-title">Pastas compartilhadas</h3>
         <div class="sidebar-section-options">
@@ -22,7 +26,7 @@
             <div class="sidebar-section-option">
                 <%  if(contacts.length > 0) { 
                     for(var contact of contacts){ %>
-                    <a href="/contact/<%= contact.id %>">
+                    <a href="/chat/<%= contact.id %>">
                             <p><%= contact.name %></p>
                     </a>
                 <% } } else { %>

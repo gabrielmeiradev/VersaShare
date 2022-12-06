@@ -4,6 +4,8 @@
 @import 'modal.css';
 @import 'buttons.css';
 @import 'folder-page.css';
+@import 'chat.css';
+@import 'settings.css';
 
 ::selection{
     z-index: 999;
@@ -62,5 +64,74 @@ button{
     color: #c03640;
     border-radius: 5px;
     margin: 10px 0;
+    background: #FFDBE3;
+}
+
+.icon-sm{
+    font-size: 1.2rem !important;
+}
+
+.contact-options{
+    margin-left: auto;
+}
+
+#profile {
+    width: 70%;
+}
+
+#profile h1{
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.color-picker {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+  }
+  .color-picker::-webkit-color-swatch {
+    border-radius: 50%;
+    border: none;
+  }
+
+  .color-picker::-moz-color-swatch {
+    border-radius: 50%;
+    border: 7px solid #000000;
+}
+
+  .color-picker-container{
+    display: flex;
+    align-items: center;
+}
+
+.file-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+td, tr{
+    text-align: left;
+}
+
+.app-error-container{
+    position: absolute;
+    top: 23px;
+    z-index: -1;
+    left: 0;
+    width: 100vw;display: flex;
+    justify-content: center;
+}
+.app-error{
+    padding: 4px 10px;
+    background: red;
+    width: fit-content;
+    color: #c03640;
+    border-radius: 5px;
     background: #FFDBE3;
 }

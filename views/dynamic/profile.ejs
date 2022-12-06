@@ -1,0 +1,36 @@
+<div id="profile">
+    <h1>Bom dia, <span class="darkmode-ignore">🌞</span> <%= user.name%></h1>
+    <form action="update-profile/" method="post">
+        <label for="name">Nome completo:</label>
+        <input type="text" class="input-main" value="<%= user.name %>" name="name">
+        
+        <br />
+        <br />
+
+        <label for="name">Username:</label>
+        <input type="text" class="input-main" value="<%= user.username %>" name="username">
+        
+        <br />
+        <br />
+
+        <label for="name">E-mail:</label>
+        <input type="text" class="input-main" value="<%= user.email %>" name="email">
+
+        <br />
+        <br />
+
+        <label for="backgroundColor">Cor de fundo do avatar</label>
+        <div class="color-picker-container">
+            <input type="color" class="color-picker darkmode-ignore" id="bg-color" value="<%= user.avatarBGColor %>" name="avatar">
+            <p id="color-picker-feedback">#aaaaaa</p>
+        </div>
+        <button class="action-button">Salvar</button>
+    </form>
+    <script>
+        const bgColorEle = document.querySelector('#bg-color');
+        const colorPickerFeedback = document.querySelector('#color-picker-feedback');
+        bgColorEle.addEventListener('input', () => {
+            colorPickerFeedback.innerHTML = bgColorEle.value;
+        })
+    </script>
+</div>

@@ -19,7 +19,8 @@
 <body>
     <%- include('dynamic/components/navbar.ejs') %>
     <%- include('dynamic/scripts/foldersActionMenu.ejs') %>
-    <%- include('dynamic/components/modal.ejs', { user, currentWorkspace }) %>
+    <%- include('dynamic/scripts/filesActionMenu.ejs') %>
+    <%- include('dynamic/scripts/contactsActionMenu.ejs') %>
     <div id="app">
         <%- include('dynamic/components/sidebar-main-page.ejs', { workspaceFolders, contacts }) %> 
         <%- body %>
@@ -27,9 +28,9 @@
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <script>
     const options = {
-    bottom: '64px', // default: '32px'
-    right: '32px', // default: '32px'
-    left: 'unset', // default: 'unset'
+    bottom: '32px', // default: '32px'
+    right: 'unset', // default: '32px'
+    left: '32px', // default: 'unset'
     time: '0.5s', // default: '0.3s'
     mixColor: '#fff', // default: '#fff'
 
